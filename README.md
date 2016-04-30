@@ -4,8 +4,11 @@ Project try to map news onto Google Map
 Run the project by
 
 ```
-    python3 GeoNews.py
+    python3 cronUpdate.py & python3 GeoNews.py
 ```
+
+cronUpdate.py is used to update the db for each five minutes
+GeoNews.py is the server servelet which simply return the last 6 hours news with geo location
 
 I am new to python. Please pip install any missing package yourself!
 

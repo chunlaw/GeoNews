@@ -69,12 +69,18 @@ class AppleSpider:
     def extractContent(self, html, url):
         soup = BeautifulSoup(html, 'html.parser')
         content = ''
+        lastUpdateTime = None
+        title = ''
+        if soup.select('.lastupdate'):
+            lastUpdateTime = soup.select('.lastupdate')[0].text
+        if soup.select('#content-article h1'):
+            title = soup.select('#content-article h1')[0].text
         paragraphs = soup.select('#content-article p')
         for paragraph in paragraphs:
             if paragraph.get('class') is None or ( paragraph.get('class') not in [ ['video-caption'], ['next'] ] ):
                 content += paragraph.text
-        if self.callback is not None:
-            self.callback(content, url)
+        if self.callback is not None and lastUpdateTime is not None:
+            self.callback(title, content, url, lastUpdateTime)
 
     # And finally here is our spider. It takes in an URL, a word to find,
     # and the number of pages to search through before giving up
