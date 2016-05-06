@@ -14,9 +14,11 @@ class GeoNewsDb:
         geoNews = []
         gmap = Gmap()
         timestamp = int(time.mktime(time.localtime())) - 60*recentMinutes
-        self.cursor.execute('SELECT url, title, location, updateTime FROM geonews WHERE updateTime >= ?', (timestamp,))
+        print ( timestamp )
+        self.cursor.execute('SELECT url, title, location, updateTime FROM geonews WHERE updateTime >= ? ORDER BY updateTime DESC', (timestamp,))
         news = self.cursor.fetchall()
         for (url, title, location, updateTime) in news:
+            updateTime = datetime.datetime.fromtimestamp(updateTime).strftime("%Y-%m-%d %H:%M:%S") + " HKT"
             geocode = json.loads( gmap.getGeoLocation(location) )
             if location != '香港':
                 geoNews.append([ url, title, location, geocode.get('geometry'), updateTime ])

@@ -78,13 +78,14 @@ class AppleSpider:
         paragraphs = soup.select('#content-article p')
         for paragraph in paragraphs:
             if paragraph.get('class') is None or ( paragraph.get('class') not in [ ['video-caption'], ['next'] ] ):
-                content += paragraph.text
+                if not paragraph.text.startswith('【'): 
+                    content += paragraph.text
         if self.callback is not None and lastUpdateTime is not None:
             self.callback(title, content, url, lastUpdateTime)
 
     # And finally here is our spider. It takes in an URL, a word to find,
     # and the number of pages to search through before giving up
-    def crawl(self, maxLevel):  
+    def crawl(self, maxLevel=1):
         pagesToVisit = self.baseUrl
         levelVisited = 0
         # The main loop. Create a LinkParser and get all the links on the page.

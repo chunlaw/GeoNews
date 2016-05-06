@@ -38,25 +38,25 @@ class GeoNewsUpdater:
         return locations
     
     # return locations
-    def addNews ( self, url, lastUpdateTime, locations, title ):
+    def addNews ( self, url, updateTime, locations, title ):
         for location in locations:
-            self.cursor.execute('INSERT INTO geonews VALUES (?, ?, ?, ?)', (url, location, title, lastUpdateTime))
+            self.cursor.execute('INSERT INTO geonews VALUES (?, ?, ?, ?)', (url, location, title, updateTime))
             self.conn.commit()
         return locations
 
     def getGeoNews(self):
         appleSpider = AppleSpider()
-        cp = ContentParser("assets/location.dict")
+        cp = ContentParser()
         gmap = Gmap()
         geoNews = []
 
         def callback( title, content, url, lastUpdateTime ):
-            print (title)
             timestamp = int ( time.mktime( time.strptime ( lastUpdateTime, "%Y-%m-%d %H:%M:%S %Z" ) ) )
+            print (title)
             locations = self.retrieveNews (url)
             cp.setContent(content)
-            locations = [location for (location,updateTime) in self.retrieveNews ( url )] or self.addNews( url, lastUpdateTime, self.uniqify(cp.getLocations()), title )
-            
+            locations = [location for (location,updateTime) in self.retrieveNews ( url )] or self.addNews( url, timestamp, self.uniqify(cp.getLocations()), title )
+            print (locations)
             geocode = ''
             for location in locations:
                 geocode = json.loads( gmap.getGeoLocation(location) )
@@ -64,5 +64,5 @@ class GeoNewsUpdater:
                     geoNews.append([ url, location, geocode.get('geometry'), lastUpdateTime ])
 
         appleSpider.setCallback(callback)
-        appleSpider.crawl(1)
+        appleSpider.crawl()
         return (geoNews)

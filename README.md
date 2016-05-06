@@ -1,6 +1,16 @@
 # GeoNews
 
 Project try to map news onto Google Map
+
+Installation
+
+```
+    pip3 install beautifulsoup4
+    pip3 install jieba
+    pip3 install googlemaps
+    pip3 install flask
+```
+
 Run the project by
 
 ```
