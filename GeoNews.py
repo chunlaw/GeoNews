@@ -1,6 +1,10 @@
 from flask import Flask
 from models.db import *
 import json
+import sys
+
+sys.stdout = sys.stderr
+
 app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['PROPAGATE_EXCEPTIONS'] = True

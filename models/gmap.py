@@ -54,7 +54,11 @@ class Gmap:
     def __del__(self):
         self.conn.close()
 
-#gmap = Gmap()
-#gmap.build()
-#print(gmap.getGeoLocation('青衣長青邨青楊樓'))
-#gmap.locate('新渡')
+    def test(self, place):
+        print ( self.getGeoLocation(place) )
+
+def test():
+    gmap = Gmap()
+    gmap.build()
+    print(gmap.getGeoLocation('青衣長青邨青楊樓'))
+    gmap.locate('新渡')
